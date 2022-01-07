@@ -1,12 +1,23 @@
-import React from 'react';
+import React from "react";
+import type {InferGetStaticPropsType} from 'next';
+import getAllProducts from "../framework/shopity/product/get-all-products";
 
-export default function Home() {
+export async function getStaticProps() {
+    const products = await getAllProducts();
 
-    let a: string = 'Hi';
+    return {
+        props: {
+            products,
+        },
+        revalidate: 4 * 60 * 60
+    }
+}
+
+export default function Home({products}: InferGetStaticPropsType<typeof getStaticProps>) {
 
     return (
         <div>
-            <h2>{a}</h2>
+            {JSON.stringify(products)}
         </div>
     )
 }
